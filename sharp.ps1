@@ -35,10 +35,9 @@ $array = $pinCodeBytes -split ","
 Function Set-Pin {
     Param
     (
-        # Param1 help description
         [Parameter(Mandatory=$False,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
+            ValueFromPipelineByPropertyName=$true,
+            Position=0)]
         [string]$pinTries = 0,
         [Parameter(Mandatory=$False,
             ValueFromPipelineByPropertyName=$true,
@@ -68,8 +67,8 @@ Function Set-RegistryJobControl {
     (
         # Param1 help description
         [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
+           ValueFromPipelineByPropertyName=$true,
+           Position=0)]
         $PrinterName
     )
     
@@ -97,8 +96,8 @@ Function Remove-RegistryPermissions {
     Param
     (
         [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
+           ValueFromPipelineByPropertyName=$true,
+           Position=0)]
         $PrinterName
     )
  
@@ -108,6 +107,13 @@ Function Remove-RegistryPermissions {
     $acl.SetAccessRuleProtection($true, $true)
     Set-Acl $path $Acl
 
+    ## https://powertoe.wordpress.com/2010/08/28/controlling-registry-acl-permissions-with-powershell/
+    ## The above scenario works fine when you have access to change permissions on the registry, but what if you are 
+    ## an administrator and the administrator group has been removed from the ACL. Fortunately, as an administrator 
+    ## I’m still the owner of the key, and I can get these permissions back, but if you try to run the above script
+    ##you will receive errors like this:
+    ## Set-Acl : Requested registry access is not allowed.
+    
     $key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\Sharp\$PrinterName\printer_ui\job_control",[Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,[System.Security.AccessControl.RegistryRights]::ChangePermissions)
     $acl = $key.GetAccessControl()
     $rule = New-Object System.Security.AccessControl.RegistryAccessRule ("hivos\app_print_without_pin","FullControl","Allow")
@@ -123,15 +129,20 @@ Function Remove-RegistryPermissions {
 Function Add-RegistryPermissions {
     Param
     (
-        # Param1 help description
         [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
+           ValueFromPipelineByPropertyName=$true,
+           Position=0)]
         $PrinterName
     )
  
     $username = "Hivos\" + $env:USERNAME
 
+    ## https://powertoe.wordpress.com/2010/08/28/controlling-registry-acl-permissions-with-powershell/
+    ## The above scenario works fine when you have access to change permissions on the registry, but what if you are 
+    ## an administrator and the administrator group has been removed from the ACL. Fortunately, as an administrator 
+    ## I’m still the owner of the key, and I can get these permissions back, but if you try to run the above script
+    ##you will receive errors like this:
+    ## Set-Acl : Requested registry access is not allowed.
     $key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\Sharp\$PrinterName\printer_ui\job_control",[Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,[System.Security.AccessControl.RegistryRights]::ChangePermissions)
 
     $acl = $key.GetAccessControl()
