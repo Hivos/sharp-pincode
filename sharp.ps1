@@ -1,4 +1,4 @@
-﻿$MinPin = 10000
+$MinPin = 10000
 $MaxPin = 99999
 $sqlLite3 = 'C:\Windows\tools\sqlite3.exe'
 $sqlLiteDB = 'C:\Windows\Tools\sharp.db'
@@ -78,17 +78,17 @@ Function Set-RegistryJobControl {
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'account_number' -Value ([byte[]](0x00))
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'folder_index' -Value 0 -Type Dword
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'folder_pass' -Value ([byte[]](0x00))
-    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'job_name' -Value '' -Type String
+    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'job_name' -Value "$env:USERNAME" -Type String
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'login_name' -Value '' -Type String
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'login_pass' -Value ([byte[]](0x00))
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'pin' -Value ([byte[]]($array))
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'set_login_name' -Value 0 -Type Dword
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'set_login_pass' -Value 0 -Type Dword
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_account_number' -Value 0 -Type Dword
-    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_job_name' -Value 0 -Type Dword
+    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_job_name' -Value 1 -Type Dword
     Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_PIN' -Value 1
-    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_user_name' -Value 0 -Type Dword
-    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'user_name' -Value '' -Type String
+    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'use_user_name' -Value 1 -Type Dword
+    Set-ItemProperty -Path "HKCU:\Software\SHARP\$PrinterName\printer_ui\job_control" -Name 'user_name' -Value "$env:USERNAME" -Type String
 }
 
 
